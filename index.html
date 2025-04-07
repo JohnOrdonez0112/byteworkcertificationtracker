@@ -217,23 +217,93 @@ document.getElementById('viewReportButton').addEventListener('click', function()
     let reportContent = document.getElementById('reportContent');
 
     reportContent.innerHTML = '';
-    
-    attempts.forEach(attempt => {
-        // Get Student Name and Certification Name from arrays
-        let student = students.find(s => s.studentID === attempt.studentID);
-        let certification = certifications.find(c => c.certificationCode === attempt.certificationCode);
 
-        // Create a report entry
-        let attemptReport = document.createElement('div');
-        attemptReport.innerHTML = `
-            <p>Student Name: ${student ? student.studentName : 'N/A'}, 
-            Certification Name: ${certification ? certification.certificationName : 'N/A'}, 
-            Certification Code: ${certification ? certification.certificationCode : 'N/A'}, 
-            Attempt Date: ${attempt.attemptDate}, 
-            Result: ${attempt.attemptResult}</p>
-        `;
-        reportContent.appendChild(attemptReport);
+    // 1. Number of students that attempted certifications
+    let studentsAttempted = [...new Set(attempts.map(attempt => attempt.studentID))].length;
+
+    // 2. Number of students that earned certifications (students who passed at least one attempt)
+    let studentsEarned = [...new Set(attempts.filter(attempt => attempt.attemptResult === 'Pass').map(attempt => attempt.studentID))].length;
+
+    // 3. Number of attempts per certification, per student
+    let attemptsPerCertification = certifications.map(cert => {
+        let certificationAttempts = attempts.filter(attempt => attempt.certificationCode === cert.certificationCode);
+        return {
+            certificationName: cert.certificationName,
+            attempts: certificationAttempts.length
+        };
     });
+
+    // 4. List of all student names, IDs, and certifications attempted
+    let studentAttempts = students.map(student => {
+        let attemptedCertifications = attempts.filter(attempt => attempt.studentID === student.studentID);
+        return {
+            studentName: student.studentName,
+            studentID: student.studentID,
+            certificationsAttempted: attemptedCertifications.map(attempt => {
+                let certification = certifications.find(c => c.certificationCode === attempt.certificationCode);
+                return certification ? certification.certificationName : 'N/A';
+            })
+        };
+    });
+
+    // 5. List of all students name, ID, and certifications completed
+    let studentCompletedCertifications = students.map(student => {
+        let completedCertifications = attempts.filter(attempt => attempt.studentID === student.studentID && attempt.attemptResult === 'Pass');
+        return {
+            studentName: student.studentName,
+            studentID: student.studentID,
+            certificationsCompleted: completedCertifications.map(attempt => {
+                let certification = certifications.find(c => c.certificationCode === attempt.certificationCode);
+                return certification ? certification.certificationName : 'N/A';
+            })
+        };
+    });
+
+    // 6. List of all students name, ID, certifications attempted, certifications completed, and date completed
+    let studentDetailedReport = students.map(student => {
+        let studentAttemptsDetails = attempts.filter(attempt => attempt.studentID === student.studentID);
+        return {
+            studentName: student.studentName,
+            studentID: student.studentID,
+            certificationsAttempted: studentAttemptsDetails.map(attempt => {
+                let certification = certifications.find(c => c.certificationCode === attempt.certificationCode);
+                return certification ? certification.certificationName : 'N/A';
+            }),
+            certificationsCompleted: studentAttemptsDetails.filter(attempt => attempt.attemptResult === 'Pass').map(attempt => {
+                let certification = certifications.find(c => c.certificationCode === attempt.certificationCode);
+                return certification ? certification.certificationName : 'N/A';
+            }),
+            completionDates: studentAttemptsDetails.filter(attempt => attempt.attemptResult === 'Pass').map(attempt => attempt.attemptDate)
+        };
+    });
+
+    // Add the report details to the report content
+    reportContent.innerHTML += `<p><strong>Number of students that attempted certifications:</strong> ${studentsAttempted}</p>`;
+    reportContent.innerHTML += `<p><strong>Number of students that earned certifications:</strong> ${studentsEarned}</p>`;
+
+    reportContent.innerHTML += `<h3>Attempts per Certification:</h3><ul>`;
+    attemptsPerCertification.forEach(cert => {
+        reportContent.innerHTML += `<li>${cert.certificationName}: ${cert.attempts} attempts</li>`;
+    });
+    reportContent.innerHTML += `</ul>`;
+
+    reportContent.innerHTML += `<h3>List of Students and Certifications Attempted:</h3><ul>`;
+    studentAttempts.forEach(student => {
+        reportContent.innerHTML += `<li>${student.studentName} (${student.studentID}) - Certifications Attempted: ${student.certificationsAttempted.join(', ')}</li>`;
+    });
+    reportContent.innerHTML += `</ul>`;
+
+    reportContent.innerHTML += `<h3>List of Students and Certifications Completed:</h3><ul>`;
+    studentCompletedCertifications.forEach(student => {
+        reportContent.innerHTML += `<li>${student.studentName} (${student.studentID}) - Certifications Completed: ${student.certificationsCompleted.join(', ')}</li>`;
+    });
+    reportContent.innerHTML += `</ul>`;
+
+    reportContent.innerHTML += `<h3>Detailed Report:</h3><ul>`;
+    studentDetailedReport.forEach(student => {
+        reportContent.innerHTML += `<li>${student.studentName} (${student.studentID}) - Attempted: ${student.certificationsAttempted.join(', ')}, Completed: ${student.certificationsCompleted.join(', ')}, Completion Dates: ${student.completionDates.join(', ')}</li>`;
+    });
+    reportContent.innerHTML += `</ul>`;
 
     reportSection.style.display = 'block';
 });
