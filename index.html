@@ -145,10 +145,12 @@
 </div>
 
 <!-- User Manual Section -->
-<div class="container section" style="background-color:#1e1e1e; margin-bottom: 40px;">
-    <h2>ByteWorks Certification Tracker User Manual</h2>
-    <pre style="white-space: pre-wrap; color: white; font-family: sans-serif;">
-ByteWorks Certification Tracker User  Manual
+<!-- Centered User Manual Section -->
+<div style="display: flex; justify-content: center; margin-bottom: 40px;">
+    <div class="section" style="background-color:#1e1e1e; padding: 20px; max-width: 800px; width: 100%; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.3);">
+        <h2 style="text-align: center; color: #00ffcc; font-family: 'Orbitron', sans-serif;">ByteWorks Certification Tracker User Manual</h2>
+        <pre style="white-space: pre-wrap; color: white; font-family: sans-serif;">
+ByteWorks Certification Tracker User Manual
 Table of Contents
 
 1. Introduction
@@ -173,14 +175,14 @@ No login required—just visit the website to get started.
 3. Adding a Student
 Go to the "Add Student" section.
 Enter the Student Name and Student ID.
-Click "Add to List".
+Click "Add Student".
 The student is now saved and selectable in the dropdown for certifications and attempts.
 
 4. Managing Certifications
 4.1 Adding a New Certification
 Go to "Add Certification".
-Enter the Certification Name and Certification ID.
-Click "Add to List".
+Enter the Certification Name and Certification Code.
+Click "Add Certification".
 4.2 Assigning a Certification to a Student
 Certifications are linked automatically when recording attempts.
 Students and certifications must already exist in the system before they can be linked through attempts.
@@ -190,7 +192,7 @@ Navigate to "Record Certification Attempt".
 Select the Student Name and Certification Name from the dropdowns.
 Enter the Attempt Date.
 Choose whether the result was Pass or Fail.
-Click "Submit Attempt".
+Click "Record Attempt".
 Each attempt is saved with:
   - Student Name
   - Certification Name
@@ -208,7 +210,7 @@ Available Reports & Data
   - List of all student names, IDs, certifications attempted and completed, with date completed
 
 To access:
-Click "View Full Report".
+Click "View Report".
 Review the generated tables for real-time information.
 Use browser tools to print or export the report if needed.
 
@@ -225,8 +227,10 @@ A: The system records all attempts. The most recent "Pass" determines the earned
 
 Q: Is there a way to reset the tracker?
 A: No reset function currently. Reach out to IT support for data reset.
-    </pre>
+        </pre>
+    </div>
 </div>
+
 
 <script>
 // JavaScript to handle form submissions and dynamic interactions
