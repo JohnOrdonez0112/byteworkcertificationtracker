@@ -11,11 +11,11 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #121212; /* Dark background */
+            background-color: #121212;
             color: white;
         }
         header {
-            background-color: #000000; /* Black background */
+            background-color: #000000;
             color: white;
             padding: 10px 0;
             text-align: center;
@@ -34,7 +34,7 @@
         .section {
             margin: 20px 0;
             padding: 20px;
-            background: rgba(0, 0, 0, 0.7); /* Dark section background */
+            background: rgba(0, 0, 0, 0.7);
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
@@ -49,13 +49,13 @@
             border: 1px solid #ccc;
         }
         button {
-            background-color: #333333; /* Dark button background */
+            background-color: #333333;
             color: white;
             cursor: pointer;
             border: none;
         }
         button:hover {
-            background-color: #555555; /* Darker shade when hovered */
+            background-color: #555555;
         }
         table {
             width: 100%;
@@ -139,11 +139,93 @@
         <button id="viewReportButton">View Report</button>
         <div id="reportSection" style="display: none;">
             <h3>Report</h3>
-            <div id="reportContent">
-                <!-- Dynamic report content will appear here -->
-            </div>
+            <div id="reportContent"></div>
         </div>
     </div>
+</div>
+
+<!-- User Manual Section -->
+<div class="container section" style="background-color:#1e1e1e; margin-bottom: 40px;">
+    <h2>ByteWorks Certification Tracker User Manual</h2>
+    <pre style="white-space: pre-wrap; color: white; font-family: inherit;">
+ByteWorks Certification Tracker User  Manual
+Table of Contents
+
+1. Introduction
+2. Accessing the Certification Tracker
+3. Adding a Student
+4. Managing Certifications
+  4.1 Adding a New Certification
+  4.2 Assigning a Certification to a Student
+5. Recording Certification Attempts
+6. Viewing Reports and Statistics
+7. Support and Troubleshooting
+8. Frequently Asked Questions (FAQs)
+
+1. Introduction
+The ByteWorks Certification Tracker is a web-based platform for monitoring student certifications, attempts, and outcomes. This system simplifies tracking certifications and provides a clear overview of student progress.
+This manual outlines how to use the system efficiently.
+
+2. Accessing the Certification Tracker
+Website: ByteWorks Certification Tracker
+No login required—just visit the website to get started.
+
+3. Adding a Student
+Go to the "Add Student" section.
+Enter the Student Name and Student ID.
+Click "Add to List".
+The student is now saved and selectable in the dropdown for certifications and attempts.
+
+4. Managing Certifications
+4.1 Adding a New Certification
+Go to "Add Certification".
+Enter the Certification Name and Certification ID.
+Click "Add to List".
+4.2 Assigning a Certification to a Student
+Certifications are linked automatically when recording attempts.
+Students and certifications must already exist in the system before they can be linked through attempts.
+
+5. Recording Certification Attempts
+Navigate to "Record Certification Attempt".
+Select the Student Name and Certification Name from the dropdowns.
+Enter the Attempt Date.
+Choose whether the result was Pass or Fail.
+Click "Submit Attempt".
+Each attempt is saved with:
+  - Student Name
+  - Certification Name
+  - Attempt Date
+  - Result (Pass/Fail)
+
+6. Viewing Reports and Statistics
+The "View Full Report" section provides a detailed breakdown of student and certification activity, including:
+Available Reports & Data
+  - Number of students that attempted certifications
+  - Number of students that earned certifications (passed at least one attempt)
+  - Number of attempts per certification, per student
+  - List of all student names, IDs, and certifications attempted
+  - List of all student names, IDs, and certifications completed
+  - List of all student names, IDs, certifications attempted and completed, with date completed
+
+To access:
+Click "View Full Report".
+Review the generated tables for real-time information.
+Use browser tools to print or export the report if needed.
+
+7. Support and Troubleshooting
+Accidental entries: Currently, there is no delete or edit function—contact support for changes.
+General Help: Email support@byteworks.com.
+
+8. Frequently Asked Questions (FAQs)
+Q: Can I track multiple attempts for the same certification and student?
+A: Yes! All attempts are logged separately.
+
+Q: What if a student passes on a later attempt?
+A: The system records all attempts. The most recent "Pass" determines the earned certification.
+
+Q: Is there a way to reset the tracker?
+A: No reset function currently. Reach out to IT support for data reset.
+    </pre>
 </div>
 
 <script>
@@ -153,7 +235,7 @@ let students = [];
 let certifications = [];
 let attempts = [];
 
-// Add Student Functionality
+// Add Student
 document.getElementById('addStudentForm').addEventListener('submit', function(e) {
     e.preventDefault();
     let studentName = document.getElementById('studentName').value;
@@ -164,7 +246,7 @@ document.getElementById('addStudentForm').addEventListener('submit', function(e)
     alert('Student added successfully!');
 });
 
-// Add Certification Functionality
+// Add Certification
 document.getElementById('addCertificationForm').addEventListener('submit', function(e) {
     e.preventDefault();
     let certificationName = document.getElementById('certificationName').value;
@@ -175,7 +257,7 @@ document.getElementById('addCertificationForm').addEventListener('submit', funct
     alert('Certification added successfully!');
 });
 
-// Record Certification Attempt Functionality
+// Record Attempt
 document.getElementById('recordAttemptForm').addEventListener('submit', function(e) {
     e.preventDefault();
     let studentID = document.getElementById('studentSelect').value;
@@ -187,7 +269,7 @@ document.getElementById('recordAttemptForm').addEventListener('submit', function
     alert('Attempt recorded successfully!');
 });
 
-// Update Student Select Options
+// Update dropdowns
 function updateStudentSelect() {
     let studentSelect = document.getElementById('studentSelect');
     studentSelect.innerHTML = '<option value="">Select a student</option>';
@@ -199,7 +281,6 @@ function updateStudentSelect() {
     });
 }
 
-// Update Certification Select Options
 function updateCertificationSelect() {
     let certificationSelect = document.getElementById('certificationSelect');
     certificationSelect.innerHTML = '<option value="">Select a certification</option>';
@@ -211,73 +292,62 @@ function updateCertificationSelect() {
     });
 }
 
-// View Report Button
+// View Report
 document.getElementById('viewReportButton').addEventListener('click', function() {
     let reportSection = document.getElementById('reportSection');
     let reportContent = document.getElementById('reportContent');
 
     reportContent.innerHTML = '';
 
-    // 1. Number of students that attempted certifications
     let studentsAttempted = [...new Set(attempts.map(attempt => attempt.studentID))].length;
+    let studentsEarned = [...new Set(attempts.filter(a => a.attemptResult === 'Pass').map(a => a.studentID))].length;
 
-    // 2. Number of students that earned certifications (students who passed at least one attempt)
-    let studentsEarned = [...new Set(attempts.filter(attempt => attempt.attemptResult === 'Pass').map(attempt => attempt.studentID))].length;
-
-    // 3. Number of attempts per certification, per student
     let attemptsPerCertification = certifications.map(cert => {
-        let certificationAttempts = attempts.filter(attempt => attempt.certificationCode === cert.certificationCode);
-        return {
-            certificationName: cert.certificationName,
-            attempts: certificationAttempts.length
-        };
+        let certAttempts = attempts.filter(a => a.certificationCode === cert.certificationCode);
+        return { certificationName: cert.certificationName, attempts: certAttempts.length };
     });
 
-    // 4. List of all student names, IDs, and certifications attempted
     let studentAttempts = students.map(student => {
-        let attemptedCertifications = attempts.filter(attempt => attempt.studentID === student.studentID);
+        let certs = attempts.filter(a => a.studentID === student.studentID);
         return {
             studentName: student.studentName,
             studentID: student.studentID,
-            certificationsAttempted: attemptedCertifications.map(attempt => {
-                let certification = certifications.find(c => c.certificationCode === attempt.certificationCode);
-                return certification ? certification.certificationName : 'N/A';
+            certificationsAttempted: certs.map(a => {
+                let cert = certifications.find(c => c.certificationCode === a.certificationCode);
+                return cert ? cert.certificationName : 'N/A';
             })
         };
     });
 
-    // 5. List of all students name, ID, and certifications completed
-    let studentCompletedCertifications = students.map(student => {
-        let completedCertifications = attempts.filter(attempt => attempt.studentID === student.studentID && attempt.attemptResult === 'Pass');
+    let studentCompleted = students.map(student => {
+        let passed = attempts.filter(a => a.studentID === student.studentID && a.attemptResult === 'Pass');
         return {
             studentName: student.studentName,
             studentID: student.studentID,
-            certificationsCompleted: completedCertifications.map(attempt => {
-                let certification = certifications.find(c => c.certificationCode === attempt.certificationCode);
-                return certification ? certification.certificationName : 'N/A';
+            certificationsCompleted: passed.map(a => {
+                let cert = certifications.find(c => c.certificationCode === a.certificationCode);
+                return cert ? cert.certificationName : 'N/A';
             })
         };
     });
 
-    // 6. List of all students name, ID, certifications attempted, certifications completed, and date completed
-    let studentDetailedReport = students.map(student => {
-        let studentAttemptsDetails = attempts.filter(attempt => attempt.studentID === student.studentID);
+    let detailed = students.map(student => {
+        let details = attempts.filter(a => a.studentID === student.studentID);
         return {
             studentName: student.studentName,
             studentID: student.studentID,
-            certificationsAttempted: studentAttemptsDetails.map(attempt => {
-                let certification = certifications.find(c => c.certificationCode === attempt.certificationCode);
-                return certification ? certification.certificationName : 'N/A';
+            certificationsAttempted: details.map(a => {
+                let cert = certifications.find(c => c.certificationCode === a.certificationCode);
+                return cert ? cert.certificationName : 'N/A';
             }),
-            certificationsCompleted: studentAttemptsDetails.filter(attempt => attempt.attemptResult === 'Pass').map(attempt => {
-                let certification = certifications.find(c => c.certificationCode === attempt.certificationCode);
-                return certification ? certification.certificationName : 'N/A';
+            certificationsCompleted: details.filter(a => a.attemptResult === 'Pass').map(a => {
+                let cert = certifications.find(c => c.certificationCode === a.certificationCode);
+                return cert ? cert.certificationName : 'N/A';
             }),
-            completionDates: studentAttemptsDetails.filter(attempt => attempt.attemptResult === 'Pass').map(attempt => attempt.attemptDate)
+            completionDates: details.filter(a => a.attemptResult === 'Pass').map(a => a.attemptDate)
         };
     });
 
-    // Add the report details to the report content
     reportContent.innerHTML += `<p><strong>Number of students that attempted certifications:</strong> ${studentsAttempted}</p>`;
     reportContent.innerHTML += `<p><strong>Number of students that earned certifications:</strong> ${studentsEarned}</p>`;
 
@@ -288,20 +358,20 @@ document.getElementById('viewReportButton').addEventListener('click', function()
     reportContent.innerHTML += `</ul>`;
 
     reportContent.innerHTML += `<h3>List of Students and Certifications Attempted:</h3><ul>`;
-    studentAttempts.forEach(student => {
-        reportContent.innerHTML += `<li>${student.studentName} (${student.studentID}) - Certifications Attempted: ${student.certificationsAttempted.join(', ')}</li>`;
+    studentAttempts.forEach(s => {
+        reportContent.innerHTML += `<li>${s.studentName} (${s.studentID}) - Certifications Attempted: ${s.certificationsAttempted.join(', ')}</li>`;
     });
     reportContent.innerHTML += `</ul>`;
 
     reportContent.innerHTML += `<h3>List of Students and Certifications Completed:</h3><ul>`;
-    studentCompletedCertifications.forEach(student => {
-        reportContent.innerHTML += `<li>${student.studentName} (${student.studentID}) - Certifications Completed: ${student.certificationsCompleted.join(', ')}</li>`;
+    studentCompleted.forEach(s => {
+        reportContent.innerHTML += `<li>${s.studentName} (${s.studentID}) - Certifications Completed: ${s.certificationsCompleted.join(', ')}</li>`;
     });
     reportContent.innerHTML += `</ul>`;
 
     reportContent.innerHTML += `<h3>Detailed Report:</h3><ul>`;
-    studentDetailedReport.forEach(student => {
-        reportContent.innerHTML += `<li>${student.studentName} (${student.studentID}) - Attempted: ${student.certificationsAttempted.join(', ')}, Completed: ${student.certificationsCompleted.join(', ')}, Completion Dates: ${student.completionDates.join(', ')}</li>`;
+    detailed.forEach(s => {
+        reportContent.innerHTML += `<li>${s.studentName} (${s.studentID}) - Attempted: ${s.certificationsAttempted.join(', ')}, Completed: ${s.certificationsCompleted.join(', ')}, Completion Dates: ${s.completionDates.join(', ')}</li>`;
     });
     reportContent.innerHTML += `</ul>`;
 
@@ -310,4 +380,4 @@ document.getElementById('viewReportButton').addEventListener('click', function()
 </script>
 
 </body>
-</html>
+</html>  
